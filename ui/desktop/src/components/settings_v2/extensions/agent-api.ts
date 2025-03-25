@@ -1,7 +1,7 @@
 import { ExtensionConfig } from '../../../api/types.gen';
 import { getApiUrl, getSecretKey } from '../../../config';
 import { toastService, ToastServiceOptions } from '../../../toasts';
-import { replaceWithShims } from './utils';
+import { replaceWithShims } from '../../../utils/shims';
 
 /**
  * Makes an API call to the extension endpoints
