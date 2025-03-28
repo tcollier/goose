@@ -1,10 +1,28 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from '@jest/globals';
+import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { replaceWithShims, SHIM_COMMANDS } from './shims';
 import { join as joinPath } from 'path';
-import { existsSync, statSync } from 'fs';
+import * as fs from 'fs';
+
+const logContents = (path: string) =>
+  console.warn(`Checking files in ${path}`, fs.readdirSync(path));
+
+const assertExectuableFile = (path: string) => {
+  if (!fs.existsSync(path)) {
+    throw new Error(`Expected executable at ${path} does not exist`);
+  } else if (!fs.statSync(path).isFile()) {
+    throw new Error(`Expected executable at ${path} is not a file`);
+  } else {
+    fs.accessSync(path, fs.constants.X_OK); // Raises an error if the file is not executable
+  }
+};
 
 describe('SHIM_COMMANDS', () => {
   const BINARY_DIR = joinPath(__dirname, '..', '..', 'src', 'bin');
+
+  beforeAll(() => {
+    const paths = [__dirname, '..', '..', 'src', 'bin'];
+    paths.forEach((_, i) => logContents(joinPath(...paths.slice(0, i + 1))));
+  });
 
   it('has a shim for `goosed`', () => {
     expect(SHIM_COMMANDS).toContain('goosed');
@@ -25,11 +43,7 @@ describe('SHIM_COMMANDS', () => {
   SHIM_COMMANDS.forEach((cmd) => {
     it(`has an executable in the binary path for ${cmd}`, async () => {
       const expectedBinaryPath = joinPath(BINARY_DIR, cmd);
-      if (!existsSync(expectedBinaryPath)) {
-        throw new Error(`Expected shim for ${cmd} at ${expectedBinaryPath} does not exist`);
-      } else if (!statSync(expectedBinaryPath).isFile()) {
-        throw new Error(`Expected shim for ${cmd} at ${expectedBinaryPath} is not a file`);
-      }
+      assertExectuableFile(expectedBinaryPath);
     });
   });
 });
