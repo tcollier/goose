@@ -54,7 +54,7 @@ jobs:
             /usr/share/swift
 
           df -h
-
+          
       - name: Checkout Code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4
 
@@ -159,7 +159,7 @@ jobs:
           node-version: "lts/*"
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
         working-directory: ui/desktop
 
       - name: Run Tests

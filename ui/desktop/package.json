@@ -5,8 +5,8 @@
   "description": "Goose App",
   "main": ".vite/build/main.js",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest src/",
+    "test:watch": "jest --watch src/",
     "generate-api": "openapi-ts",
     "start-gui": "npm run generate-api && electron-forge start",
     "start": "cd ../.. && just run-ui",
