@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { replaceWithShims, SHIM_COMMANDS, SUPPORTED_EXTENSION_RUNNERS } from './shims';
+import { replaceWithShim, SHIM_COMMANDS, SUPPORTED_EXTENSION_RUNNERS } from './shims';
 import { join as joinPath } from 'path';
 import * as fs from 'fs';
 
@@ -31,6 +31,8 @@ describe('SHIM_COMMANDS', () => {
     expect(SHIM_COMMANDS).toContain('uvx');
   });
 
+  // The `goosed` shim is an artifact of the rust build process and is not checked into the
+  // git repository like the other shimmed commands.
   SUPPORTED_EXTENSION_RUNNERS.forEach((cmd) => {
     it(`has an executable in the binary path for ${cmd}`, async () => {
       const expectedBinaryPath = joinPath(BINARY_DIR, cmd);
@@ -39,7 +41,7 @@ describe('SHIM_COMMANDS', () => {
   });
 });
 
-describe('replaceWithShims', () => {
+describe('replaceWithShim', () => {
   const originalElectron = window.electron;
   const originalLog = console.log;
 
@@ -60,13 +62,13 @@ describe('replaceWithShims', () => {
 
   it('returns the input command string if it is not a known shim', async () => {
     const cmd = 'unknown-command';
-    const result = await replaceWithShims(cmd);
+    const result = await replaceWithShim(cmd);
     expect(result).toBe(cmd);
   });
 
   SHIM_COMMANDS.forEach((cmd) => {
     it(`returns the exectuable path to the shim for ${cmd}`, async () => {
-      const result = await replaceWithShims(cmd);
+      const result = await replaceWithShim(cmd);
       expect(result).toBe(`/path/to/${cmd}`);
     });
   });

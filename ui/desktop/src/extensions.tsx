@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import builtInExtensionsData from './built-in-extensions.json';
 import { toastError, toastLoading, toastSuccess } from './toasts';
 import { Toast } from 'react-toastify/dist/components';
-import { replaceWithShims } from './utils/shims';
+import { replaceWithShim } from './utils/shims';
 
 // Hardcoded default extension timeout in seconds
 export const DEFAULT_EXTENSION_TIMEOUT = 300;
@@ -70,7 +70,7 @@ export async function addExtension(
       type: extension.type,
       ...(extension.type === 'stdio' && {
         name: sanitizeName(extension.name),
-        cmd: await replaceWithShims(extension.cmd),
+        cmd: await replaceWithShim(extension.cmd),
         args: extension.args || [],
       }),
       ...(extension.type === 'sse' && {

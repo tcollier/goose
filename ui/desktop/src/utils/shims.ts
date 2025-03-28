@@ -6,7 +6,7 @@ export const SHIM_COMMANDS = ['goosed', ...SUPPORTED_EXTENSION_RUNNERS];
  * @param cmd The command to potentially replace with a shim
  * @returns The path to the binary if it's a known shim, otherwise returns the original command
  */
-export async function replaceWithShims(cmd: string): Promise<string> {
+export async function replaceWithShim(cmd: string): Promise<string> {
   if (SHIM_COMMANDS.indexOf(cmd) === -1) {
     return cmd;
   }
