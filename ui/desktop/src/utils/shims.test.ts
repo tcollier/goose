@@ -44,13 +44,14 @@ describe('SHIM_COMMANDS', () => {
 describe('replaceWithShim', () => {
   const originalElectron = window.electron;
   const originalLog = console.log;
+  const getBinaryPath = jest
+    .fn()
+    .mockImplementation((cmd: string) => Promise.resolve(`/path/to/${cmd}`));
 
   beforeEach(() => {
     window.electron = {
       ...window.electron,
-      getBinaryPath: jest.fn().mockImplementation((cmd) => Promise.resolve(`/path/to/${cmd}`)) as (
-        binaryName: string
-      ) => Promise<string>,
+      getBinaryPath,
     };
     console.log = jest.fn();
   });
