@@ -3,10 +3,14 @@ import { replaceWithShims, SHIM_COMMANDS } from './shims';
 import { join as joinPath } from 'path';
 import * as fs from 'fs';
 
-const logContents = (path: string) =>
+const logContents = (path: string) => {
+  console.warn('EXISTS', path, fs.existsSync(path));
   console.warn(`Checking files in ${path}`, fs.readdirSync(path));
+};
 
 const assertExectuableFile = (path: string) => {
+  console.warn('EXISTS', path, fs.existsSync(path));
+  console.warn('IS_FILE', path, fs.statSync(path).isFile());
   if (!fs.existsSync(path)) {
     throw new Error(`Expected executable at ${path} does not exist`);
   } else if (!fs.statSync(path).isFile()) {
