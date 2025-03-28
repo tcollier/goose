@@ -1,16 +1,9 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, jest } from '@jest/globals';
-import { replaceWithShims, SHIM_COMMANDS } from './shims';
+import { replaceWithShims, SHIM_COMMANDS, SUPPORTED_EXTENSION_RUNNERS } from './shims';
 import { join as joinPath } from 'path';
 import * as fs from 'fs';
 
-const logContents = (path: string) => {
-  console.warn('EXISTS', path, fs.existsSync(path));
-  console.warn(`Checking files in ${path}`, fs.readdirSync(path));
-};
-
 const assertExectuableFile = (path: string) => {
-  console.warn('EXISTS', path, fs.existsSync(path));
-  console.warn('IS_FILE', path, fs.statSync(path).isFile());
   if (!fs.existsSync(path)) {
     throw new Error(`Expected executable at ${path} does not exist`);
   } else if (!fs.statSync(path).isFile()) {
@@ -22,12 +15,6 @@ const assertExectuableFile = (path: string) => {
 
 describe('SHIM_COMMANDS', () => {
   const BINARY_DIR = joinPath(__dirname, '..', '..', 'src', 'bin');
-
-  beforeAll(() => {
-    const paths = [__dirname, '..', '..', 'src', 'bin'];
-    paths.forEach((_, i) => logContents(joinPath(...paths.slice(0, i + 1))));
-  });
-
   it('has a shim for `goosed`', () => {
     expect(SHIM_COMMANDS).toContain('goosed');
   });
@@ -44,7 +31,7 @@ describe('SHIM_COMMANDS', () => {
     expect(SHIM_COMMANDS).toContain('uvx');
   });
 
-  SHIM_COMMANDS.forEach((cmd) => {
+  SUPPORTED_EXTENSION_RUNNERS.forEach((cmd) => {
     it(`has an executable in the binary path for ${cmd}`, async () => {
       const expectedBinaryPath = joinPath(BINARY_DIR, cmd);
       assertExectuableFile(expectedBinaryPath);

@@ -1,5 +1,5 @@
-const SUPPORTED_EXTENSION_RUNNERS = ['jbang', 'npx', 'uvx'];
-export const SHIM_COMMANDS = ['goosed', ...SUPPORTED_EXTENSION_RUNNERS] as const;
+export const SUPPORTED_EXTENSION_RUNNERS = ['jbang', 'npx', 'uvx'];
+export const SHIM_COMMANDS = ['goosed', ...SUPPORTED_EXTENSION_RUNNERS];
 
 /**
  * Replaces the command with the corresponding binary path for the shim if one is supported
